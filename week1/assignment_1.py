@@ -1,6 +1,6 @@
 ################################################################################
 #
-# Student Names: Henk, Lodewijk, Nils Boonstra
+# Student Names: Henk, Lodewijk, Nils
 #
 #
 # Student Numbers: ....., 11054115, 11784415
@@ -78,7 +78,7 @@ def ride_to_wall(timeout):
     while dist > 25:
         dist = SonarDistance()
         c_time = CurrentTick()
-        
+
         #timeout
         if c_time - s_time > timeout:
             return False
@@ -89,7 +89,7 @@ def ride_to_wall(timeout):
 
 def turn_left():
     '''
-        turns the robot 90 degrees to the left, 
+        turns the robot 90 degrees to the left,
         and returns the sonar distance to the nearest object
     '''
 
@@ -112,7 +112,7 @@ def turn_left():
 
 def turn_right():
     '''
-        turns the robot 90 degrees to the right, 
+        turns the robot 90 degrees to the right,
         and returns the sonar distance to the nearest object
     '''
 
