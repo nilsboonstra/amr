@@ -1,0 +1,6 @@
+sim.py
+simConst.py
+remoteApi.so
+
+# Pycache files
+*.pyc

@@ -3,7 +3,7 @@
 # Student Names: Henk, Lodewijk, Nils Boonstra
 #
 #
-# Student Numbers: ....., ....., 11784415
+# Student Numbers: ....., 11054115, 11784415
 #
 #
 # Group number: 17
@@ -25,12 +25,8 @@ except:
 sim.simxFinish(-1) # just in case, close all opened connections
 clientID=sim.simxStart('127.0.0.1',19999,True,True,5000,5) # Connect to CoppeliaSim
 
-print(clientID)
 import time
 import argparse
-
-def SonarDistance():
-    return call_func('SensorSonar')[2][0]
 
 def call_func(name, ints=[], floats=[], strings=[]):
     '''
@@ -57,25 +53,48 @@ def timer(wait_time):
         if (current_time[0] - start_time) > wait_time:
             break
 
-def ride_to_wall():
-    '''robot rides until distance to wall < 25'''
+def SonarDistance():
+    '''Returns sonar distance'''
+    return call_func('SensorSonar')[2][0]
+
+def CurrentTick():
+    '''Return the current tick of the simulation'''
+    return call_func("CurrentTick")[2][0]
+
+def ride_to_wall(timeout):
+    '''
+        Robot rides until distance to wall < 25.
+        Return True if a wall is found, false if timed out.
+    '''
 
     # start motor
-    call_func('On', [3, 4])
+    call_func('On', [3, 1])
 
     # check if distance > 25
     dist = SonarDistance()
+    s_time = CurrentTick()
+    c_time = CurrentTick()
+
     while dist > 25:
         dist = SonarDistance()
-        gyro = call_func('SensorGyroA')[1][0]
+        c_time = CurrentTick()
+        
+        #timeout
+        if c_time - s_time > timeout:
+            return False
 
     # turn motor off if distance < 25
     call_func('Off', [3])
-
-    return False
+    return True
 
 def turn_left():
-    '''turn the robot 90 degrees to the left'''
+    '''
+        turns the robot 90 degrees to the left, 
+        and returns the sonar distance to the nearest object
+    '''
+
+    #reset gyro
+    call_func('ResetGyroA')
 
     # turn left
     call_func('On', ints=[2, 1])
@@ -86,14 +105,19 @@ def turn_left():
     while gyro > -90:
         gyro = call_func('SensorGyroA')[1][0]
 
-    # turn off motors and reset gyro
+    # turn off motors
     call_func('Off', [3])
-    gyro = call_func('ResetGyroA')
 
-    return
+    return SonarDistance()
 
 def turn_right():
-    '''turn the robot 90 degrees to the right'''
+    '''
+        turns the robot 90 degrees to the right, 
+        and returns the sonar distance to the nearest object
+    '''
+
+    #reset gyro
+    call_func('ResetGyroA')
 
     # turn to right
     call_func('On', ints=[1, 1])
@@ -104,34 +128,18 @@ def turn_right():
     while gyro < 90:
         gyro = call_func('SensorGyroA')[1][0]
 
-    # turn off motors and reset gyro
+    # turn off motors
     call_func('Off', [3])
-    gyro = call_func('ResetGyroA')
 
-    return
-
-def turn():
-    '''turn the robot to the right until the path is clear'''
-    # first try to turn left
-    turn_left()
-
-    # if there is still a wall, turn right until path is clear
-    dist = SonarDistance()
-    while dist < 30:
-        turn_right()
-        dist = SonarDistance()
-
-    return True
-
+    return SonarDistance()
 
 def exercise_1():
     '''
         Exercise 1: drive the car through the maze without using sensors
     '''
+
     call_func('On', ints=[3, 10])
     timer(4.2)
-    suspected_distance = call_func('SensorSonar')
-    print("dist:", suspected_distance[2][0])
 
     call_func('On', ints=[1, 10])
     call_func('On', ints=[2, 5])
@@ -149,22 +157,23 @@ def exercise_1():
 
     call_func('Off', ints=[3])
 
-
 def exercise_2():
     '''
         Exercise 2: drive the car through the maze using sensors
     '''
 
     # Reset the gyro
-    gyro = call_func('ResetGyroA')
+    call_func('ResetGyroA')
 
-    # while distance to wall < 25 ride, else turn
-    while True:
-        ride_to_wall()
-        turn()
+    no_timeout = ride_to_wall(100)
+    while no_timeout:
+        # Ride to wall, and then turn
+        no_timeout = ride_to_wall(100)
+        dist = turn_left()
 
-    return
-
+        # Find possible path
+        while dist < 25:
+            dist = turn_right()
 
 if __name__ == "__main__":
     # Parse arguments
