@@ -1,6 +1,6 @@
-sim.py
-simConst.py
-remoteApi.so
+week1/sim.py
+week1/simConst.py
+week1/remoteApi.so
 
 # Pycache files
 *.pyc
