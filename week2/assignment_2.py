@@ -59,7 +59,25 @@ def main():
         Exercise 3: drive the car through the maze without stopping
     '''
 
-    ### YOUR CODE FOR EXERCISE 3 HERE
+
+    call_func('On', ints=[3, 10])
+    timer(4.2)
+
+    call_func('On', ints=[1, 10])
+    call_func('On', ints=[2, 5])
+    timer(1.22)
+
+    call_func('On', ints=[3, 10])
+    timer(4.0)
+
+    call_func('On', ints=[2, 10])
+    call_func('On', ints=[1, 5])
+    timer(1.2)
+
+    call_func('On', ints=[3, 10])
+    timer(10)
+
+    call_func('Off', ints=[3])
 
     return
 
