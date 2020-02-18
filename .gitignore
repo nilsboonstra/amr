@@ -4,3 +4,9 @@ week1/remoteApi.so
 
 # Pycache files
 *.pyc
+
+# Notebook files
+.DS_Store
+*.ipynb_checkpoints
+__pycache__
+*.swp
