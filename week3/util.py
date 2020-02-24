@@ -117,7 +117,7 @@ def points_helper(x1, x2, y1, y2, number, epsilon):
     
     x_res = []
     y_res = []
-    for i in range(number+1):
+    for i in range(number):
         x_res.append((x1+x_steps*i) + normal()*epsilon)
         y_res.append((y1+y_steps*i) + normal()*epsilon)
     
@@ -142,11 +142,7 @@ def get_line_points(x, y, number, epsilon):
         x_res += x_temp
         y_res += y_temp
     
-    args = list(range(len(x_res)))
-
-    random.shuffle(args)
-    
-    return np.array(x_res)[args], np.array(y_res)[args]
+    return np.array(x_res), np.array(y_res)
 
 def visualize(x_points=[], y_points=[], lines=[]):
     """
@@ -258,10 +254,10 @@ def get_coords(exercise):
                             9.93781162,  9.93272615, 10.13196551])
 
     if exercise == 2:
-        x_points = np.array([6.56050522, 5.03274245, 0.07085426, 10.10366057, 9.98151464, 8.17608616,
-            9.95440092, 1.76112919, 3.3038893, 10.04445705, 9.8940228, 10.12058128]) 
-        y_points = np.array([9.84145918,  9.96393957,  9.80545067,  6.68359018,  5.07589423,  9.89037595,
-            10.00203053, 10.09557847,  9.97688341,  3.30031845,  8.34526453,  1.62103725])
+        x_points = np.array([10, 10, 10, 10, 10, 10, 10, 10, 8.57142857, 7.14285714, 5.71428571, 4.28571429, 2.85714286,  1.42857143]) 
+        y_points = np.array([0,  1.42857143,  2.85714286,  4.28571429,  5.71428571,  7.14285714, 8.57142857, 10, 10, 10, 10, 10, 10, 10])
+         
+
 
     if exercise == 3:
         L1_x = np.array([6.56050522, 5.03274245, 0.07085426, 8.17608616, 9.95440092,
@@ -279,7 +275,7 @@ def get_coords(exercise):
     return x_points, y_points
 
 def get_arg():
-    return 6
+    return 7
 
 def get_line(exercise):
     """
